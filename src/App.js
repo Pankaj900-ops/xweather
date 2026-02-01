@@ -11,9 +11,12 @@ function App() {
   const handleSearch = async () => {
     if (!city) return;
 
-    
+    // ✅ Force loading render
     setLoading(true);
     setWeather(null);
+
+    // ✅ THIS LINE IS THE KEY (forces UI render)
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     try {
       const response = await fetch(
@@ -29,7 +32,6 @@ function App() {
     } catch (error) {
       alert("Failed to fetch weather data");
     } finally {
-      
       setLoading(false);
     }
   };
@@ -38,7 +40,6 @@ function App() {
     <div className="app">
       <h2>Weather Application</h2>
 
-      {/* REQUIRED input */}
       <input
         type="text"
         placeholder="Enter city name"
@@ -46,13 +47,11 @@ function App() {
         onChange={(e) => setCity(e.target.value)}
       />
 
-      {/* REQUIRED button */}
       <button onClick={handleSearch}>Search</button>
 
-      {/* ✅ REQUIRED loading message */}
+      {/* ✅ REQUIRED by test */}
       {loading && <p>Loading data…</p>}
 
-      {/* Weather cards */}
       {weather && (
         <div className="weather-cards">
           <div className="weather-card">
